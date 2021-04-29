@@ -10,7 +10,7 @@ function App() {
   const [state, setState] = useState({
     showForm: false,
     searchText: "",
-    userEditObject: [],
+    userEditObject: {},
     editUserStatus: false,
     data: [],
     nameForm: true,
@@ -18,17 +18,13 @@ function App() {
     update: true,
   });
 
-  // const fetchData = () => {
-  //   if (localStorage.getItem("userData") === null) {
-  //     localStorage.setItem("userData", []);
-  //   } else {
-  //     const temp = JSON.parse(localStorage.getItem("userData"));
-  //     setState({ ...state, data: temp });
-  //   }
-  // };
-
   useEffect(() => {
-    setState({ ...state, data: [] });
+    if (localStorage.getItem("userData") === null) {
+      localStorage.setItem("userData", []);
+    } else {
+      const temp = JSON.parse(localStorage.getItem("userData"));
+      setState((x) => ({ ...x, data: temp }));
+    }
   }, []);
 
   const getUserEditInfoApp = (info) => {

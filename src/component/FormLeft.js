@@ -2,6 +2,13 @@ import React, { useState, useEffect } from "react";
 import PropTypes from "prop-types";
 
 const FormLeft = (props) => {
+  const {
+    nameForm,
+    close,
+    getUserEditInfo,
+    userEditObject,
+    add: addNew,
+  } = props;
   const [state, setState] = useState({
     value: "false",
     name: "",
@@ -20,8 +27,6 @@ const FormLeft = (props) => {
   };
 
   const add = () => {
-    const { nameForm, close, getUserEditInfo } = props;
-    const addNew = props.add;
     if (nameForm === true && state.name !== "") {
       if (duplicate(state.name) === 0) {
         addNew(state.name, state.value);
@@ -75,29 +80,32 @@ const FormLeft = (props) => {
   };
 
   useEffect(() => {
-    const { nameForm, userEditObject } = props;
     if (nameForm === true) {
-      setState({
-        ...state,
+      setState((x) => ({
+        ...x,
         titleForm: "Them",
         name: "",
         value: "false",
         id: "",
-      });
+      }));
     } else {
-      setState({
-        ...state,
+      setState((x) => ({
+        ...x,
         titleForm: "sua",
         name: userEditObject.name,
         value: userEditObject.value,
         id: userEditObject.id,
-      });
+      }));
     }
-  }, []);
+  }, [
+    nameForm,
+    userEditObject,
+    userEditObject.id,
+    userEditObject.name,
+    userEditObject.value,
+  ]);
 
   const titleForm = () => {
-    const { nameForm } = props;
-
     if (nameForm === true) {
       return "them";
     }
@@ -105,7 +113,6 @@ const FormLeft = (props) => {
   };
 
   const nameFun = () => {
-    const { nameForm } = props;
     const { name } = state;
 
     if (nameForm === true) {
@@ -115,9 +122,6 @@ const FormLeft = (props) => {
   };
 
   //   render() {
-  const { close } = props;
-  const { userEditObject } = props;
-
   return (
     <div className="menu-left">
       <div className="title">
@@ -173,12 +177,15 @@ FormLeft.propTypes = {
   add: PropTypes.func.isRequired,
   close: PropTypes.func.isRequired,
   getUserEditInfo: PropTypes.func.isRequired,
-  userEditObject: PropTypes.objectOf(PropTypes.string),
+  userEditObject: PropTypes.shape({
+    id: PropTypes.string,
+    name: PropTypes.string,
+    value: PropTypes.string,
+  }).isRequired,
   data: PropTypes.arrayOf(PropTypes.object),
 };
 FormLeft.defaultProps = {
   nameForm: true,
-  userEditObject: "",
   data: [],
 };
 export default FormLeft;
