@@ -93,7 +93,7 @@ const FormLeft = (props) => {
         id: userEditObject.id,
       });
     }
-  }, [state, props]);
+  }, []);
 
   const titleForm = () => {
     const { nameForm } = props;
@@ -173,16 +173,12 @@ FormLeft.propTypes = {
   add: PropTypes.func.isRequired,
   close: PropTypes.func.isRequired,
   getUserEditInfo: PropTypes.func.isRequired,
-  userEditObject: PropTypes.shape({
-    id: PropTypes.string,
-    name: PropTypes.string,
-    value: PropTypes.string,
-  }),
-  data: PropTypes.arrayOf(PropTypes.string),
+  userEditObject: PropTypes.objectOf(PropTypes.string),
+  data: PropTypes.arrayOf(PropTypes.object),
 };
 FormLeft.defaultProps = {
   nameForm: true,
-  userEditObject: [],
+  userEditObject: "",
   data: [],
 };
 export default FormLeft;

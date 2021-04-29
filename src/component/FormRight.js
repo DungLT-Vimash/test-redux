@@ -274,7 +274,7 @@ const FormRight = (props) => {
     if (props.dataUserProps !== null && state.sort === "") {
       return props.dataUserProps.map((value, key) => (
         <Row
-          key={key}
+          key={value.id}
           deleteButtonClick={(idUser) => deleteButtonClick(idUser)}
           changeStatus={(id) => props.changeStatus(id)}
           editFunClick={() => props.editFun(value)}
@@ -291,7 +291,7 @@ const FormRight = (props) => {
         .sort(compareAZ)
         .map((value, key) => (
           <Row
-            key={key}
+            key={value.id}
             deleteButtonClick={(idUser) => deleteButtonClick(idUser)}
             changeStatus={(id) => props.changeStatus(id)}
             editFunClick={() => props.editFun(value)}
@@ -307,10 +307,10 @@ const FormRight = (props) => {
         .sort(compareZA)
         .map((value, key) => (
           <Row
-            key={key}
             deleteButtonClick={(idUser) => deleteButtonClick(idUser)}
             changeStatus={(id) => props.changeStatus(id)}
             editFunClick={() => props.editFun(value)}
+            key={value.id}
             userName={value.name}
             stt={key}
             value={value.value}
@@ -324,11 +324,11 @@ const FormRight = (props) => {
         .sort(statusActive)
         .map((value, key) => (
           <Row
-            key={key}
             deleteButtonClick={(idUser) => deleteButtonClick(idUser)}
             changeStatus={(id) => props.changeStatus(id)}
             editFunClick={() => props.editFun(value)}
             userName={value.name}
+            key={value.id}
             stt={key}
             value={value.value}
             id={value.id}
@@ -340,11 +340,11 @@ const FormRight = (props) => {
         .sort(statusHide)
         .map((value, key) => (
           <Row
-            key={key}
             deleteButtonClick={(idUser) => deleteButtonClick(idUser)}
             changeStatus={(id) => props.changeStatus(id)}
             editFunClick={() => props.editFun(value)}
             userName={value.name}
+            key={value.id}
             stt={key}
             value={value.value}
             id={value.id}
@@ -360,13 +360,13 @@ const FormRight = (props) => {
       });
       return result.map((value, key) => (
         <Row
-          key={key}
           deleteButtonClick={(idUser) => deleteButtonClick(idUser)}
           changeStatus={(id) => props.changeStatus(id)}
           editFunClick={() => props.editFun(value)}
           userName={value.name}
           stt={key}
           value={value.value}
+          key={value.id}
           id={value.id}
         />
       ));
@@ -380,7 +380,7 @@ const FormRight = (props) => {
       });
       return result.map((value, key) => (
         <Row
-          key={key}
+          key={value.id}
           deleteButtonClick={(idUser) => deleteButtonClick(idUser)}
           changeStatus={(id) => props.changeStatus(id)}
           editFunClick={() => props.editFun(value)}
@@ -469,9 +469,17 @@ FormRight.propTypes = {
   deleteUser: PropTypes.func.isRequired,
   editFun: PropTypes.func.isRequired,
   getTextSearch: PropTypes.func.isRequired,
-  dataUserProps: PropTypes.func.isRequired,
+  dataUserProps: PropTypes.arrayOf(
+    PropTypes.shape({
+      id: PropTypes.string,
+      name: PropTypes.string,
+      value: PropTypes.string,
+    })
+  ),
   changeStatus: PropTypes.func.isRequired,
   editclickbtn: PropTypes.func.isRequired,
 };
-
+FormRight.defaultProps = {
+  dataUserProps: [],
+};
 export default FormRight;

@@ -27,7 +27,7 @@ const Row = (props) => {
     editclickbtn();
   };
 
-  const deleteButtonClick = (idUser) => {
+  const deleteButtonClick1 = (idUser) => {
     // props.deleteButtonClick(idUser);
     const { deleteButtonClick } = props;
     confirmAlert({
@@ -71,7 +71,7 @@ const Row = (props) => {
         <button
           className="button btn-delete"
           type="button"
-          onClick={() => deleteButtonClick(id)}
+          onClick={() => deleteButtonClick1(id)}
         >
           <i className="fas fa-trash-alt" /> Xoa
         </button>
@@ -82,7 +82,14 @@ const Row = (props) => {
 Row.propTypes = {
   value: PropTypes.string.isRequired,
   id: PropTypes.string.isRequired,
-  editFunClick: PropTypes.string.isRequired,
-  editclickbtn: PropTypes.string.isRequired,
+  editFunClick: PropTypes.func.isRequired,
+  editclickbtn: PropTypes.func,
+  deleteButtonClick: PropTypes.func.isRequired,
+  stt: PropTypes.number.isRequired,
+  changeStatus: PropTypes.func.isRequired,
+  userName: PropTypes.string.isRequired,
+};
+Row.defaultProps = {
+  editclickbtn: null,
 };
 export default Row;

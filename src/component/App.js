@@ -17,23 +17,27 @@ function App() {
     addNew: false,
     update: true,
   });
+
+  // const fetchData = () => {
+  //   if (localStorage.getItem("userData") === null) {
+  //     localStorage.setItem("userData", []);
+  //   } else {
+  //     const temp = JSON.parse(localStorage.getItem("userData"));
+  //     setState({ ...state, data: temp });
+  //   }
+  // };
+
   useEffect(() => {
-    if (localStorage.getItem("userData") === null) {
-      localStorage.setItem("userData", []);
-    } else {
-      const temp = JSON.parse(localStorage.getItem("userData"));
-      setState({ ...state, data: temp });
-    }
-  }, [state]);
+    setState({ ...state, data: [] });
+  }, []);
 
   const getUserEditInfoApp = (info) => {
-    state.data.map((value) => {
-      if (value.id === info.id) {
-        state.data.id.name = info.name;
-        state.data.id.value = info.value;
+    for (let i = 0; i < state.data.length; i += 1) {
+      if (state.data[i].id === info.id) {
+        state.data[i].name = info.name;
+        state.data[i].value = info.value;
       }
-      return null;
-    });
+    }
     localStorage.setItem("userData", JSON.stringify(state.data));
   };
   const getUserEditInfo = (info) => {
@@ -66,15 +70,12 @@ function App() {
 
   const changeStatus = (id) => {
     const temp = state.data;
-
-    temp.map((element) => {
-      if (element.id === id) {
-        if (element.value === "true") state.data.id.value = "false";
-        if (element.value === "false") state.data.id.value = "true";
+    for (let i = 0; i < temp.length; i += 1) {
+      if (temp[i].id === id) {
+        if (temp[i].value === "true") temp[i].value = "false";
+        else if (temp[i].value === "false") temp[i].value = "true";
       }
-      return null;
-    });
-
+    }
     setState({ ...state, data: temp });
     localStorage.setItem("userData", JSON.stringify(state.data));
   };
