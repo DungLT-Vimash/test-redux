@@ -2,12 +2,16 @@ import React, { useState, useEffect } from "react";
 import { v4 as uuidv4 } from "uuid";
 import "../App.css";
 import "../fontawesome/css/all.css";
+import { useDispatch, useSelector } from "react-redux";
+// import axios from "axios";
 import Header from "./Header";
 import FormLeft from "./FormLeft";
 import FormRight from "./FormRight";
+import { fetchListTask, addListData } from "../actions/todoActions";
+// import { getList } from "../apis/task";
 
 function App() {
-  const [state, setState] = useState({
+  const [stateFunction, setState] = useState({
     showForm: false,
     searchText: "",
     userEditObject: {},
@@ -18,29 +22,30 @@ function App() {
     update: true,
   });
 
+  const dispatch = useDispatch();
+  const data = useSelector((state) => state.todo.data);
   useEffect(() => {
-    if (localStorage.getItem("userData") === null) {
-      localStorage.setItem("userData", []);
-    } else {
-      const temp = JSON.parse(localStorage.getItem("userData"));
-      setState((x) => ({ ...x, data: temp }));
-    }
-  }, []);
-
+    dispatch(fetchListTask());
+    // let temp = 0;
+    // if (data && temp === 0) {
+    //   temp += 1;
+    //   setState((x) => ({ ...x, data }));
+    // }
+  }, [dispatch]);
   const getUserEditInfoApp = (info) => {
-    for (let i = 0; i < state.data.length; i += 1) {
-      if (state.data[i].id === info.id) {
-        state.data[i].name = info.name;
-        state.data[i].value = info.value;
+    for (let i = 0; i < stateFunction.data.length; i += 1) {
+      if (stateFunction.data[i].id === info.id) {
+        stateFunction.data[i].name = info.name;
+        stateFunction.data[i].value = info.value;
       }
     }
-    localStorage.setItem("userData", JSON.stringify(state.data));
+    localStorage.setItem("userData", JSON.stringify(stateFunction.data));
   };
   const getUserEditInfo = (info) => {
     getUserEditInfoApp(info);
   };
   const editUser = (user) => {
-    state.userEditObject = user;
+    stateFunction.userEditObject = user;
   };
 
   const getNewUserData = (name, value) => {
@@ -48,63 +53,72 @@ function App() {
     item.id = uuidv4();
     item.name = name;
     item.value = value;
-    const items = state.data;
+    const items = stateFunction.data;
+    console.log("items");
+    console.log(data);
     items.push(item);
-    setState({ ...state, data: items });
-    localStorage.setItem("userData", JSON.stringify(items));
+    // setState({ ...state, data: items });
+    // localStorage.setItem("userData", JSON.stringify(items));
+    dispatch(addListData(item));
+    setState({ ...stateFunction, data: items });
   };
 
   const getTextSearch = (dl) => {
-    setState({ ...state, searchText: dl });
+    setState({ ...stateFunction, searchText: dl });
   };
 
   const deleteUser = (idUser) => {
-    const tempData = state.data.filter((item) => item.id !== idUser);
-    setState({ ...state, data: tempData });
+    const tempData = stateFunction.data.filter((item) => item.id !== idUser);
+    setState({ ...stateFunction, data: tempData });
     localStorage.removeItem("userData", JSON.stringify(idUser));
   };
 
   const changeStatus = (id) => {
-    const temp = state.data;
+    const temp = stateFunction.data;
     for (let i = 0; i < temp.length; i += 1) {
       if (temp[i].id === id) {
         if (temp[i].value === "true") temp[i].value = "false";
         else if (temp[i].value === "false") temp[i].value = "true";
       }
     }
-    setState({ ...state, data: temp });
-    localStorage.setItem("userData", JSON.stringify(state.data));
+    // setState({ ...stateFunction, data: temp });
+    // localStorage.setItem("userData", JSON.stringify(state.data));
   };
 
-  const showData = () => {
-    const result = [];
+  // const showData = () => {
+  //   const result = [];
 
-    state.data.forEach((item) => {
-      if (item.name.indexOf(state.searchText) !== -1) {
-        result.push(item);
-      }
-    });
-    return result;
-  };
+  //   if (data) {
+  //     try {
+  //       console.log(data);
+  //       data.forEach((element) => {
+  //         result.push(element);
+  //       });
+  //     } catch {
+  //       console.log(data);
+  //     }
+  //   }
+  //   return result;
+  // };
 
   return (
     <div className="App">
       <Header />
       <div className="main">
-        {state.showForm && (
+        {stateFunction.showForm && (
           <FormLeft
-            nameForm={state.nameForm}
+            nameForm={stateFunction.nameForm}
             add={(name, value) => getNewUserData(name, value)}
-            close={() => setState({ ...state, showForm: false })}
-            userEditObject={state.userEditObject}
+            close={() => setState({ ...stateFunction, showForm: false })}
+            userEditObject={stateFunction.userEditObject}
             getUserEditInfo={(info) => getUserEditInfo(info)}
-            data={state.data}
+            data={stateFunction.data}
           />
         )}
         <FormRight
           onchangeform={() => {
             setState({
-              ...state,
+              ...stateFunction,
               showForm: true,
               nameForm: true,
               addNew: true,
@@ -113,11 +127,11 @@ function App() {
           deleteUser={(idUser) => deleteUser(idUser)}
           editFun={(user) => editUser(user)}
           getTextSearch={(dl) => getTextSearch(dl)}
-          dataUserProps={showData()}
+          dataUserProps={data}
           changeStatus={(id) => changeStatus(id)}
           editclickbtn={() => {
             setState({
-              ...state,
+              ...stateFunction,
               showForm: true,
               nameForm: false,
               addNew: false,

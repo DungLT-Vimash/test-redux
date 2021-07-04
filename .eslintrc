@@ -9,7 +9,7 @@
   "plugins": [
     // ...
     "prettier", "jsx-a11y", "import",
-    "react-hooks"
+    "react-hooks","react"
   ],
   "parser": "babel-eslint",
   "env": {

@@ -1,0 +1,27 @@
+# @name getTest
+GET http://localhost:8080/task HTTP/1.1
+
+###
+
+# @name add
+POST http://localhost:8080/task
+Content-Type: application/json
+
+{
+    "id": 3,
+    "name": "aaa",
+    "value": "false"
+}
+
+###
+# @name update
+PATCH  http://localhost:8080/task/3
+Content-Type: application/json
+
+{
+    "value": "true"
+}
+###
+# @name delete
+delete  http://localhost:8080/task/3
+Content-Type: application/json
